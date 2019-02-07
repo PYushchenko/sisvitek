@@ -1,0 +1,33 @@
+<h3>Add transaction</h3>
+<form [formGroup]="outcomeForm" (ngSubmit)="onFormSubmit(outcomeForm.value)" class="outcome-form">
+  <mat-form-field class="form-full-width">
+    <input formControlName="date" type="date" matInput placeholder="Date">
+  </mat-form-field>
+
+  <mat-form-field class="form-full-width">
+    <input formControlName="place_from" matInput placeholder="From">
+  </mat-form-field>
+  <!--<mat-form-field class="form-full-width">
+    <mat-label>From</mat-label>
+    <mat-select #fontSize value="16px" (selectionChange)="triggerResize()">
+      <mat-option value="10px">10px</mat-option>
+      <mat-option value="12px">12px</mat-option>
+      <mat-option value="14px">14px</mat-option>
+      <mat-option value="16px">16px</mat-option>
+      <mat-option value="18px">18px</mat-option>
+      <mat-option value="20px">20px</mat-option>
+    </mat-select>
+  </mat-form-field>-->
+  <mat-form-field class="form-full-width">
+    <input formControlName="amount_from" matInput placeholder="Amount">
+  </mat-form-field>
+  <mat-form-field class="from-full-width">
+    <input formControlName="amount_from_currency" matInput #postalCode maxlength="5" placeholder="Currency"
+           value="RUB">
+  </mat-form-field>
+
+  <mat-form-field class="form-full-width">
+    <textarea formControlName="description" matInput placeholder="Description"></textarea>
+  </mat-form-field>
+</form>
+<button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="onFormSubmit(outcomeForm.value)">Add</button>
