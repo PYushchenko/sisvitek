@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from "@angular/material";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatChipList, MatDialog} from "@angular/material";
 import {AddTransactionDialogComponent} from "../add-transaction-dialog/add-transaction-dialog.component";
 import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {TransactionService} from "../transaction.service";
@@ -17,6 +17,9 @@ export class TransactionOverviewComponent implements OnInit {
 
   allForm: FormGroup;
   outcomeForm: FormGroup;
+
+  @ViewChild('tagsList')
+  tagsList: MatChipList;
 
   public transactionsArray: any = [];
 

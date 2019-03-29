@@ -16,11 +16,11 @@ class PlaceSerializer(serializers.ModelSerializer):
 
     def get_balance_from(self, obj):
         return {data['amount_from_currency']: data['amount_from__sum'] for data in
-                obj.transfers_from.values('amount_from_currency').annotate(Sum('amount_from'))}
+                obj.transfers_from.filter(deleted=False).values('amount_from_currency').annotate(Sum('amount_from'))}
 
     def get_balance_to(self, obj):
         return {data['amount_to_currency']: data['amount_to__sum'] for data in
-                obj.transfers_to.values('amount_to_currency').annotate(Sum('amount_to'))}
+                obj.transfers_to.filter(deleted=False).values('amount_to_currency').annotate(Sum('amount_to'))}
 
     def get_balance(self, obj):
         balance_from = self.get_balance_from(obj)

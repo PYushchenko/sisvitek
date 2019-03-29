@@ -1,27 +1,35 @@
-<mat-chip-list>
-  <mat-chip *ngFor="let tag of tags">{{ tag.name }}</mat-chip>
-</mat-chip-list>
+<div class="container">
+  <div class="row">
+    <mat-chip-list #tagsList [selectable]="true" [multiple]="true">
+      <mat-chip *ngFor="let tag of tags" [selectable]="true" [selected]="true" >{{ tag.name }}</mat-chip>
+    </mat-chip-list>
+    {{ tagsList.selected }}
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">From</th>
+        <th scope="col">Amount From</th>
+        <th scope="col">To</th>
+        <th scope="col">Amount To</th>
+        <th scope="col">Description</th>
+      </tr>
+      </thead>
 
-<table class="table">
-  <thead>
-  <tr>
-    <th scope="col">Date</th>
-    <th scope="col">From</th>
-    <th scope="col">Amount From</th>
-    <th scope="col">To</th>
-    <th scope="col">Amount To</th>
-    <th scope="col">Description</th>
-  </tr>
-  </thead>
+      <tbody>
+      <tr *ngFor="let transaction of transactionsArray">
+        <th scope="row">{{ transaction.date }}</th>
+        <td>{{ transaction.place_from?.name }}</td>
+        <td>{{ transaction.amount_from }} {{ transaction.amount_from_currency }}</td>
+        <td>{{ transaction.place_to?.name }}</td>
+        <td>{{ transaction.amount_to }} {{ transaction.amount_to_currency }}</td>
+        <td>{{ transaction.description }}</td>
+      </tr>
+      </tbody>
+    </table>
 
-  <tbody>
-  <tr *ngFor="let transaction of transactionsArray">
-    <th scope="row">{{ transaction.date }}</th>
-    <td>{{ transaction.place_from?.name }}</td>
-    <td>{{ transaction.amount_from }} {{ transaction.amount_from_currency }}</td>
-    <td>{{ transaction.place_to?.name }}</td>
-    <td>{{ transaction.amount_to }} {{ transaction.amount_to_currency }}</td>
-    <td>{{ transaction.description }}</td>
-  </tr>
-  </tbody>
-</table>
+  </div>
+</div>
+

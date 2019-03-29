@@ -46,6 +46,7 @@ class Transaction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.CharField(max_length=512, blank=True)
     tags = models.ManyToManyField(Tag, blank=True)
+    deleted = models.BooleanField()
     created_by = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(editable=False)
     updated_at = models.DateTimeField(editable=False)

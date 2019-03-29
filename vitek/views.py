@@ -30,7 +30,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Provides basic CRUD functions for the Transaction model
     """
-    queryset = Transaction.objects.all().order_by('date')
+    queryset = Transaction.objects.filter(deleted=False).all().order_by('-date')
     serializer_class = serializers.TransactionSerializer
     permission_classes = (ReadOnly,)
     filter_backends = (DjangoFilterBackend,)
