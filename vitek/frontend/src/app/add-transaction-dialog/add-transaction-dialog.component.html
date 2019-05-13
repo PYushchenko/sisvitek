@@ -1,11 +1,21 @@
 <h3>Add transaction</h3>
 <form [formGroup]="outcomeForm" (ngSubmit)="onFormSubmit(outcomeForm.value)" class="outcome-form">
   <mat-form-field class="form-full-width">
-    <input formControlName="date" type="date" matInput placeholder="Date">
+    <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field class="form-full-width">
-    <input formControlName="place_from" matInput placeholder="From">
+<!--    <mat-select [(value)]="places" formControlName="place_From"></mat-select>-->
+<!--    <input formControlName="place_from" matInput placeholder="From">-->
+
+    <input type="text" placeholder="From" aria-label="From" matInput formControlName="place_from" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let place of places" [value]="place">
+        {{place.name}}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
   <!--<mat-form-field class="form-full-width">
     <mat-label>From</mat-label>
@@ -22,12 +32,12 @@
     <input formControlName="amount_from" matInput placeholder="Amount">
   </mat-form-field>
   <mat-form-field class="from-full-width">
-    <input formControlName="amount_from_currency" matInput #postalCode maxlength="5" placeholder="Currency"
-           value="RUB">
+    <input formControlName="amount_from_currency" matInput maxlength="5" placeholder="Currency"
+            [defaultValue]="'RUB'">
   </mat-form-field>
 
   <mat-form-field class="form-full-width">
     <textarea formControlName="description" matInput placeholder="Description"></textarea>
   </mat-form-field>
 </form>
-<button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="onFormSubmit(outcomeForm.value)">Add</button>
+<button mat-button (click)="onFormSubmit(outcomeForm.value)">Add</button>

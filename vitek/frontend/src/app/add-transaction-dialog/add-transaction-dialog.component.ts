@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {TransactionService} from "../transaction.service";
+import {PlaceService} from "../place.service";
 
 @Component({
   selector: 'app-add-transaction-dialog',
@@ -11,7 +12,9 @@ export class AddTransactionDialogComponent implements OnInit {
 
   outcomeForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private transactionService: TransactionService) {
+  places: any = [];
+
+  constructor(private fb: FormBuilder, private transactionService: TransactionService, private placeService: PlaceService) {
     this.outcomeForm = fb.group({
       'place_from': [null, Validators.required],
       'amount_from': [null, Validators.required],
@@ -22,6 +25,13 @@ export class AddTransactionDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getPlaces()
+  }
+
+  private getPlaces() {
+    this.placeService.list().subscribe(data => {
+      this.places = data['places'];
+    })
   }
 
   onFormSubmit(form: NgForm) {
@@ -29,5 +39,9 @@ export class AddTransactionDialogComponent implements OnInit {
     this.transactionService.createOutcome(form).subscribe(data => {
       console.log(data);
     });
+  }
+
+  displayFn(place?: any): string | undefined {
+    return place ? place.name : undefined;
   }
 }

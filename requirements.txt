@@ -8,3 +8,5 @@ py-moneyed==0.8.0
 PyJWT==1.7.1
 pytz==2018.7
 six==1.12.0
+drf-aggregates==0.0.10
+pandas==0.22.0

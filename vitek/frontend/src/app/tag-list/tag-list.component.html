@@ -1,0 +1,6 @@
+<mat-chip-list #tagsList [selectable]="true" [multiple]="true">
+  <mat-chip *ngFor="let tag of tags" #chip="matChip"
+            (click)="tag.selected ? chip.deselect() : chip.selectViaInteraction()"
+            [selected]="tag.selected" [selectable]="true"
+            (selectionChange)="changeSelected($event, tag)">{{ tag.name }}</mat-chip>
+</mat-chip-list>

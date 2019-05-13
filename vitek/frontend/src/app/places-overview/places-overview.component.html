@@ -1,12 +1,23 @@
-<ul>
-  <li *ngFor="let place of placeArray">
-    {{ place.name }}
-    <ul>
-      <ng-container *ngFor="let amount of place.balance | keyvalue">
-        <li *ngIf="amount.value" [class]="amount.value >  0 ? 'green' : 'red'">
-          {{ amount.value }} {{ amount.key }}
-        </li>
-      </ng-container>
-    </ul>
-  </li>
-</ul>
+<div class="container places-block">
+  <h2>Places</h2>
+  <ul class="list-unstyled">
+    <li *ngFor="let place of placeArray">
+      {{ place.name }}
+      <ul>
+        <ng-container *ngFor="let amount of place.balance | keyvalue">
+          <li *ngIf="amount.value" [class]="amount.value >  0 ? 'green' : 'red'">
+            {{ amount.value }} {{ amount.key }}
+          </li>
+        </ng-container>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Total</h3>
+  {{ total_rub | number }} RUB
+  <ul>
+    <ng-container *ngFor="let amount of total | keyvalue">
+      <li>{{ amount.value }} {{ amount.key }}</li>
+    </ng-container>
+  </ul>
+</div>

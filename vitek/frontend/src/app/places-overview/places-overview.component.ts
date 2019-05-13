@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PlaceService} from "../place.service";
+import {Place} from "../models/place";
 
 @Component({
   selector: 'app-places-overview',
@@ -8,7 +9,10 @@ import {PlaceService} from "../place.service";
 })
 export class PlacesOverviewComponent implements OnInit {
 
-  placeArray: any = [];
+  placeArray: Place[] = [];
+
+  total: any;
+  total_rub: any;
 
   constructor(private placeService: PlaceService) { }
 
@@ -18,7 +22,9 @@ export class PlacesOverviewComponent implements OnInit {
 
   private getPlaces() {
     this.placeService.list().subscribe(data => {
-      this.placeArray = data;
+      this.placeArray = data.places;
+      this.total = data.total;
+      this.total_rub = data.total_rub;
     })
   }
 }

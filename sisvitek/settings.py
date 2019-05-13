@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djmoney',
+    'djmoney.contrib.exchange',
     'rest_framework',
     'django_filters',
     'vitek'
@@ -141,6 +142,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
+    '/static/'
 ]
 
 STATIC_ROOT = 'static/'
+
+
+CURRENCIES = ('USD', 'EUR', 'RUB')
+OPEN_EXCHANGE_RATES_APP_ID = "f525d98cdb884bf6be3x0218b32d88aa0"
+AUTO_CONVERT_MONEY = True

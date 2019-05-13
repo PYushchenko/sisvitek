@@ -1,9 +1,10 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatChipList, MatDialog} from "@angular/material";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatChip, MatChipList, MatChipSelectionChange, MatDialog} from "@angular/material";
 import {AddTransactionDialogComponent} from "../add-transaction-dialog/add-transaction-dialog.component";
 import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {TransactionService} from "../transaction.service";
 import {TagsService} from "../tags.service";
+import {Transaction} from "../models/transaction";
 
 @Component({
   selector: 'app-transaction-overview',
@@ -18,14 +19,12 @@ export class TransactionOverviewComponent implements OnInit {
   allForm: FormGroup;
   outcomeForm: FormGroup;
 
-  @ViewChild('tagsList')
-  tagsList: MatChipList;
-
-  public transactionsArray: any = [];
-
-  public tags: any = [];
+  public transactionsArray: Transaction[] = [];
 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private transactionService: TransactionService, private tagsService: TagsService) {
+    this.tagsService.selectedTags$.subscribe(selectedTags => {
+      this.getTransactions(selectedTags);
+    })
   }
 
   ngOnInit() {
@@ -47,11 +46,10 @@ export class TransactionOverviewComponent implements OnInit {
       'date': [null, Validators.required],
     });
     this.getTransactions();
-    this.getTags();
   }
 
-  getTransactions() {
-    this.transactionService.list().subscribe(data => this.transactionsArray = data)
+  getTransactions(selectedTags: number[] = []) {
+    this.transactionService.list(selectedTags).subscribe(data => this.transactionsArray = data)
   }
 
   openAddTransactionDialog() {
@@ -67,9 +65,5 @@ export class TransactionOverviewComponent implements OnInit {
     this.transactionService.createOutcome(form).subscribe(data => {
       console.log(data);
     });
-  }
-
-  private getTags() {
-    this.tagsService.list().subscribe( data => this.tags = data);
   }
 }

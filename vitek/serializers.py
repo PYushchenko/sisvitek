@@ -3,16 +3,16 @@ from djmoney.contrib.django_rest_framework import MoneyField
 from moneyed import CURRENCIES, DEFAULT_CURRENCY_CODE
 from rest_framework import serializers
 
-from vitek.models import Transaction, Place, OutcomeTransaction, Tag
+from vitek.models import Transaction, Place, Tag, Category
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    start_balance = MoneyField(max_digits=10, decimal_places=2)
+    # start_balance = MoneyField(max_digits=10, decimal_places=2)
     balance = serializers.SerializerMethodField()
 
     class Meta:
         model = Place
-        fields = ['id', 'name', 'start_balance', 'start_balance_currency', 'balance']
+        fields = ['id', 'name', 'balance']
 
     def get_balance_from(self, obj):
         return {data['amount_from_currency']: data['amount_from__sum'] for data in
@@ -27,7 +27,8 @@ class PlaceSerializer(serializers.ModelSerializer):
         balance_to = self.get_balance_to(obj)
         balance = {key: balance_to.get(key, 0) - balance_from.get(key, 0) for key in
                    set(balance_from.keys()) | set(balance_to.keys())}
-        balance[obj.start_balance.currency.code] = balance.get(obj.start_balance.currency.code, 0) + obj.start_balance.amount
+        for start_balance in obj.start_balances.all():
+            balance[start_balance.balance.currency.code] = balance.get(start_balance.balance.currency.code, 0) + start_balance.balance.amount
         return balance
 
 
@@ -37,41 +38,17 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 class TransactionSerializer(serializers.ModelSerializer):
     place_to = PlaceSerializer(read_only=True)
     place_from = PlaceSerializer(read_only=True)
     tags = TagSerializer(many=True)
+    category = CategorySerializer()
 
     class Meta:
         model = Transaction
         fields = '__all__'
-
-
-class OutcomeTransactionSerializer(serializers.ModelSerializer):
-    amount_from = MoneyField(max_digits=10, decimal_places=2)
-    amount_from_currency = serializers.ChoiceField(choices=CURRENCIES, default=DEFAULT_CURRENCY_CODE)
-
-    class Meta:
-        model = OutcomeTransaction
-        fields = ['place_from', 'amount_from', 'amount_from_currency', 'created_by']
-
-
-class IncomeTransactionSerializer(serializers.ModelSerializer):
-    amount_to = MoneyField(max_digits=10, decimal_places=2)
-    amount_to_currency = serializers.ChoiceField(choices=CURRENCIES, default=DEFAULT_CURRENCY_CODE)
-
-    class Meta:
-        model = OutcomeTransaction
-        fields = ['place_to', 'amount_to', 'amount_to_currency', 'created_by']
-
-
-class TransferTransactionSerializer(serializers.ModelSerializer):
-    amount_from = MoneyField(max_digits=10, decimal_places=2)
-    amount_from_currency = serializers.ChoiceField(choices=CURRENCIES, default=DEFAULT_CURRENCY_CODE)
-    amount_to = MoneyField(max_digits=10, decimal_places=2)
-    amount_to_currency = serializers.ChoiceField(choices=CURRENCIES, default=DEFAULT_CURRENCY_CODE)
-
-    class Meta:
-        model = OutcomeTransaction
-        fields = ['place_from', 'amount_from', 'amount_from_currency', 'place_to', 'amount_to', 'amount_to_currency', 'created_by']
-
